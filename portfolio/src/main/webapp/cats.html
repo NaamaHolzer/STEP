@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <title>The Gallery</title>
+      <link rel="stylesheet" href="style.css">
+      <script src="catsScript.js"></script>
+      <style>
+          div {
+            text-align: center;
+            }
+      </style>
+    </head>
+    <body>
+        <div id="content">
+            <h1>Welcome to the Gallery</h1>
+        <p>
+            <label>Which cat do you want to see?</label>
+            <select name="names" id="names" onchange="findWantedPicture()">
+                <option selected disabled>Choose here</option>
+                <option value="pisu">Pisu</option>
+                <option value="karzi">Karzi</option>
+                </select>
+        </p>
+        <p>
+            <label>  <br>What kind of picture do you want to see?</label>
+            <select  name="actions" id="actions" onchange="findWantedPicture()">
+                <option selected disabled>Choose here</option>
+                <option value="sleeping">Sleeping</option>
+                <option value="eating">Eating</option>
+                <option value="funny">A funny picture</option>
+                <option value="busy">Busy</option>
+            </select>
+        </p>
+        <p>
+            <label><br>Can't decide?</label>
+            <button onclick="findRandomPicture()">Show me a random picture of both of them!</button>
+            </p>
+    </div>
+    <div id="imageContainer"></div>
+    </body>
+</html>
