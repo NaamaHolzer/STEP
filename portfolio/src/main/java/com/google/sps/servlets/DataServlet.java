@@ -27,12 +27,12 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-//List of comments the portfolio received.
+// List of comments the portfolio received.
  private List<Comment> comments;
 
   @Override
   public void init() {
-    comments=new ArrayList<>();
+    comments = new ArrayList<>();
   }
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -43,12 +43,12 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      ArrayList<String> likedVal=new ArrayList<>();
-      //Creating a new Comment instance based on the new comment that was received.
-      String writerVal=getParameter(request,"writer","Anonymous");
-      //The received rate. Default value is 3.
-      int rangeVal=Integer.parseInt(getParameter(request, "rate", "3"));
-      //Add only checked checkboxes to the 'liked' list.
+      ArrayList<String> likedVal = new ArrayList<>();
+      // Creating a new Comment instance based on the new comment that was received.
+      String writerVal = getParameter(request,"writer","Anonymous");
+      // The received rate. Default value is 3.
+      int rangeVal = Integer.parseInt(getParameter(request, "rate", "3"));
+      // Add only checked checkboxes to the 'liked' list.
       if(Boolean.parseBoolean(getParameter(request, "info", "false"))){
           likedVal.add("The information");
 
@@ -65,9 +65,9 @@ public class DataServlet extends HttpServlet {
           likedVal.add("Other");
 
       }
-      String textVal=getParameter(request,"text","");
-      Comment newComment=new Comment(writerVal,rangeVal,likedVal,textVal);
-      //Add the new comment to the comments list.
+      String textVal = getParameter(request,"text","");
+      Comment newComment = new Comment(writerVal,rangeVal,likedVal,textVal);
+      // Add the new comment to the comments list.
       comments.add(newComment);
       response.sendRedirect("/index.html"); 
   }
