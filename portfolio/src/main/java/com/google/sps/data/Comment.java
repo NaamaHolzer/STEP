@@ -22,19 +22,19 @@ import java.util.List;
  * <p>Note: The private variables in this class are converted into JSON.
  */
 public class Comment {
-    private String writer;
+    private String author;
     // The 1-5 rate users can give.
-    private int range;
+    private int rate;
     // The options marked as 'liked' by the user.
     private ArrayList<String> liked;
     private String text;
-    public Comment(String newWriter, int newRange, ArrayList<String> newLiked, String newText){
+    public Comment(String newAuthor, int newRate, ArrayList<String> newLiked, String newText){
         this.liked = new ArrayList<>();
         for(String likedItem : newLiked){
             liked.add(likedItem);
         }
-        this.writer = newWriter;
-        this.range = newRange;
+        this.author = newAuthor;
+        this.rate = newRate;
         this.text = newText;
     }
   }

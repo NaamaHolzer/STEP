@@ -45,28 +45,24 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       ArrayList<String> likedVal = new ArrayList<>();
       // Creating a new Comment instance based on the new comment that was received.
-      String writerVal = getParameter(request,"writer","Anonymous");
+      String authorVal = getParameter(request,"author","Anonymous");
       // The received rate. Default value is 3.
-      int rangeVal = Integer.parseInt(getParameter(request, "rate", "3"));
+      int rateVal = Integer.parseInt(getParameter(request, "rate", "3"));
       // Add only checked checkboxes to the 'liked' list.
-      if(Boolean.parseBoolean(getParameter(request, "info", "false"))){
+      if(Boolean.parseBoolean(getParameter(request, "is_info_liked'", "false"))){
           likedVal.add("The information");
-
       }
-      if(Boolean.parseBoolean(getParameter(request, "facts", "false"))){
+      if(Boolean.parseBoolean(getParameter(request, "is_facts_liked'", "false"))){
           likedVal.add("The facts");
-
       }
-      if(Boolean.parseBoolean(getParameter(request, "gallery", "false"))){
+      if(Boolean.parseBoolean(getParameter(request, "is_gallery_liked'", "false"))){
           likedVal.add("The gallery");
-
       }
-      if(Boolean.parseBoolean(getParameter(request, "other", "false"))){
+      if(Boolean.parseBoolean(getParameter(request, "is_other_liked", "false"))){
           likedVal.add("Other");
-
       }
       String textVal = getParameter(request,"text","");
-      Comment newComment = new Comment(writerVal,rangeVal,likedVal,textVal);
+      Comment newComment = new Comment(authorVal,rateVal,likedVal,textVal);
       // Add the new comment to the comments list.
       comments.add(newComment);
       response.sendRedirect("/index.html"); 
@@ -75,7 +71,7 @@ public class DataServlet extends HttpServlet {
    * @return the request parameter, or the default value if the parameter
    *         was not specified by the client
    */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+  private static String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
     if (value == null) {
       return defaultValue;

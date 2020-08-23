@@ -34,7 +34,7 @@ function addRandomFact() {
     const totalEl = document.getElementById('comments-container');
     let commentStr = '';
         for(i = 0;i < allComments.length;i++){
-            commentStr = allComments[i].writer+": Rate: "+allComments[i].range+". ";
+            commentStr = allComments[i].author+": Rate: "+allComments[i].rate+". ";
             // If the list of the liked items is not empty - display the liked items. 
             if((allComments[i].liked).length!==0){
                 commentStr += "Liked: "+allComments[i].liked+". ";
