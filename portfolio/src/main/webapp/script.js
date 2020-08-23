@@ -27,3 +27,33 @@ function addRandomFact() {
   const factContainer = document.getElementById('fact-container');
   factContainer.innerText = fact;
 }
+
+//Invoked when the pages is loaded. Gets the comments list from the server and displays it.
+ function getMessageFromServer(){
+    fetch('/data').then(response => response.json()).then((allComments) => {
+    const totalEl = document.getElementById('comments-container');
+    let commentStr='';
+        for(i=0;i<allComments.length;i++){
+            commentStr=allComments[i].writer+": Rate: "+allComments[i].range+". ";
+            //If the list of the liked items is not empty - display the liked items. 
+            if((allComments[i].liked).length!==0){
+                commentStr+="Liked: "+allComments[i].liked+". ";
+            }
+            //If the comment includes text - display it.
+            if(allComments[i].text!==''){
+                commentStr+="Comment: "+allComments[i].text;
+            }
+            commentEl=createPElement(commentStr);
+            totalEl.appendChild(commentEl);
+        }
+    });
+ }
+
+function createPElement(text){
+  const pElement = document.createElement('p');
+  pElement.innerText = text;
+  return pElement;
+}
+
+
+
