@@ -101,11 +101,12 @@ public class DataServlet extends HttpServlet {
 
   // Sets the 'is_*item*_liked' property of an entity.
   private static void setIsItemLiked(HttpServletRequest request, Entity entity, String item){
-     if(Boolean.parseBoolean(getParameter(request, "is_" + item + "_liked", "false"))){
-          entity.setProperty("is_" + item + "_liked", "true");
+     String itemParameterName = "is_" + item + "_liked";
+     if(Boolean.parseBoolean(getParameter(request, itemParameterName, "false"))){
+          entity.setProperty(itemParameterName, "true");
       } 
       else{
-          entity.setProperty("is_" + item + "_liked", "false");
+          entity.setProperty(itemParameterName, "false");
       }
   }
 }
