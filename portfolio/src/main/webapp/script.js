@@ -36,8 +36,8 @@ function addRandomFact() {
         for(i = 0;i < allComments.length;i++){
             commentStr = allComments[i].author+": Rate: "+allComments[i].rate+". ";
             // If the list of the liked items is not empty - display the liked items. 
-            if((allComments[i].liked).length!==0){
-                commentStr += "Liked: "+allComments[i].liked+". ";
+            if((allComments[i].likedOptions).length!==0){
+                commentStr += "Liked: "+allComments[i].likedOptions+". ";
             }
             // If the comment includes text - display it.
             if(allComments[i].text!==''){

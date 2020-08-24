@@ -43,26 +43,26 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      ArrayList<String> likedVal = new ArrayList<>();
+      ArrayList<String> likedOptionsVal = new ArrayList<>();
       // Creating a new Comment instance based on the new comment that was received.
       String authorVal = getParameter(request,"author","Anonymous");
       // The received rate. Default value is 3.
       int rateVal = Integer.parseInt(getParameter(request, "rate", "3"));
       // Add only checked checkboxes to the 'liked' list.
       if(Boolean.parseBoolean(getParameter(request, "is_info_liked'", "false"))){
-          likedVal.add("The information");
+          likedOptionsVal.add("The information");
       }
       if(Boolean.parseBoolean(getParameter(request, "is_facts_liked'", "false"))){
-          likedVal.add("The facts");
+          likedOptionsVal.add("The facts");
       }
       if(Boolean.parseBoolean(getParameter(request, "is_gallery_liked'", "false"))){
-          likedVal.add("The gallery");
+          likedOptionsVal.add("The gallery");
       }
       if(Boolean.parseBoolean(getParameter(request, "is_other_liked", "false"))){
-          likedVal.add("Other");
+          likedOptionsVal.add("Other");
       }
       String textVal = getParameter(request,"text","");
-      Comment newComment = new Comment(authorVal,rateVal,likedVal,textVal);
+      Comment newComment = new Comment(authorVal,rateVal,likedOptionsVal,textVal);
       // Add the new comment to the comments list.
       comments.add(newComment);
       response.sendRedirect("/index.html"); 

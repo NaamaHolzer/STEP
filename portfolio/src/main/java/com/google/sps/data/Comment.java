@@ -26,13 +26,10 @@ public class Comment {
     // The 1-5 rate users can give.
     private int rate;
     // The options marked as 'liked' by the user.
-    private ArrayList<String> liked;
+    private ArrayList<String> likedOptions;
     private String text;
-    public Comment(String newAuthor, int newRate, ArrayList<String> newLiked, String newText){
-        this.liked = new ArrayList<>();
-        for(String likedItem : newLiked){
-            liked.add(likedItem);
-        }
+    public Comment(String newAuthor, int newRate, ArrayList<String> newLikedOptions, String newText){
+        this.likedOptions = new ArrayList<>(newLikedOptions);
         this.author = newAuthor;
         this.rate = newRate;
         this.text = newText;
