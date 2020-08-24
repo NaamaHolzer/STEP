@@ -42,12 +42,11 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     List<Comment> comments = new ArrayList<>();
-    ArrayList<String> likedOptionsVal = new ArrayList<>();
     // Add all the comments in the datastore to the comments list
     for (Entity entity : results.asIterable()) {
         String authorVal = (String) entity.getProperty("author");
         int rateVal = (int)(long) entity.getProperty("rate");
-        likedOptionsVal.clear();
+        ArrayList<String> likedOptionsVal = new ArrayList<>();
         if (Boolean.parseBoolean((String) entity.getProperty("is_info_liked"))){
            likedOptionsVal.add("The info");
         }
