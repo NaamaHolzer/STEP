@@ -48,16 +48,16 @@ public class DataServlet extends HttpServlet {
         String authorVal = (String) entity.getProperty("author");
         int rateVal = (int)(long) entity.getProperty("rate");
         likedOptionsVal.clear();
-        if(((String) entity.getProperty("is_info_liked")).equals("true")){
+        if (Boolean.parseBoolean((String) entity.getProperty("is_info_liked"))){
            likedOptionsVal.add("The info");
         }
-        if(((String) entity.getProperty("is_facts_liked")).equals("true")){
+        if (Boolean.parseBoolean((String) entity.getProperty("is_facts_liked"))){
             likedOptionsVal.add("The facts");
         }
-        if(((String) entity.getProperty("is_gallery_liked")).equals("true")){
+        if (Boolean.parseBoolean((String) entity.getProperty("is_gallery_liked"))){
             likedOptionsVal.add("The gallery");
         }
-        if(((String) entity.getProperty("is_other_liked")).equals("true")){
+        if (Boolean.parseBoolean((String) entity.getProperty("is_other_liked"))){
             likedOptionsVal.add("Other");
         }
         String textVal = (String) entity.getProperty("text");
