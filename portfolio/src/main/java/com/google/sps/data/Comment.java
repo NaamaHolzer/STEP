@@ -28,10 +28,13 @@ public class Comment {
     // The options marked as 'liked' by the user.
     private ArrayList<String> likedOptions;
     private String text;
-    public Comment(String newAuthor, int newRate, ArrayList<String> newLikedOptions, String newText){
+    //Timestamp to enable sorting the comments
+    private final long timestamp;
+    public Comment(String newAuthor, int newRate, ArrayList<String> newLikedOptions, String newText, long newTimestamp) {
         this.likedOptions = new ArrayList<>(newLikedOptions);
         this.author = newAuthor;
         this.rate = newRate;
         this.text = newText;
+        this.timestamp = newTimestamp;
     }
-  }
+}
