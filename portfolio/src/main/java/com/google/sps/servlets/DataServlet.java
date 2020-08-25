@@ -14,6 +14,12 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.sps.data.Comment;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -27,44 +33,58 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-// List of comments the portfolio received.
- private List<Comment> comments;
 
   @Override
-  public void init() {
-    comments = new ArrayList<>();
-  }
-  @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("application/json");
-    String json = new Gson().toJson(comments);
-    response.getWriter().println(json);
+    Query query = new Query("Comment").addSort("rate", SortDirection.DESCENDING);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    List<Comment> comments = new ArrayList<>();
+    // Add all the comments in the datastore to the comments list
+    for (Entity entity : results.asIterable()) {
+        String authorVal = (String) entity.getProperty("author");
+        int rateVal = (int)(long) entity.getProperty("rate");
+        ArrayList<String> likedOptionsVal = new ArrayList<>();
+        if (Boolean.parseBoolean((String) entity.getProperty("is_info_liked"))){
+           likedOptionsVal.add("The info");
+        }
+        if (Boolean.parseBoolean((String) entity.getProperty("is_facts_liked"))){
+            likedOptionsVal.add("The facts");
+        }
+        if (Boolean.parseBoolean((String) entity.getProperty("is_gallery_liked"))){
+            likedOptionsVal.add("The gallery");
+        }
+        if (Boolean.parseBoolean((String) entity.getProperty("is_other_liked"))){
+            likedOptionsVal.add("Other");
+        }
+        String textVal = (String) entity.getProperty("text");
+        Comment comment = new Comment(authorVal,rateVal,likedOptionsVal,textVal);
+        comments.add(comment);
+    }
+    Gson gson = new Gson();
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(comments));
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      ArrayList<String> likedOptionsVal = new ArrayList<>();
-      // Creating a new Comment instance based on the new comment that was received.
+      // Create a new Comment entity based on the new comment that was received.
+      Entity commentEntity = new Entity("Comment");
       String authorVal = getParameter(request,"author","Anonymous");
-      // The received rate. Default value is 3.
       int rateVal = Integer.parseInt(getParameter(request, "rate", "3"));
-      // Add only checked checkboxes to the 'liked' list.
-      if(Boolean.parseBoolean(getParameter(request, "is_info_liked'", "false"))){
-          likedOptionsVal.add("The information");
-      }
-      if(Boolean.parseBoolean(getParameter(request, "is_facts_liked'", "false"))){
-          likedOptionsVal.add("The facts");
-      }
-      if(Boolean.parseBoolean(getParameter(request, "is_gallery_liked'", "false"))){
-          likedOptionsVal.add("The gallery");
-      }
-      if(Boolean.parseBoolean(getParameter(request, "is_other_liked", "false"))){
-          likedOptionsVal.add("Other");
-      }
+      setIsItemLiked(request,commentEntity,"info");
+      setIsItemLiked(request,commentEntity,"facts");
+      setIsItemLiked(request,commentEntity,"gallery");
+      setIsItemLiked(request,commentEntity,"other");
       String textVal = getParameter(request,"text","");
-      Comment newComment = new Comment(authorVal,rateVal,likedOptionsVal,textVal);
-      // Add the new comment to the comments list.
-      comments.add(newComment);
+      commentEntity.setProperty("author", authorVal);
+      commentEntity.setProperty("rate", rateVal);
+      commentEntity.setProperty("text", textVal);
+      // Add comment to the datastore
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(commentEntity);
       response.sendRedirect("/index.html"); 
   }
  /**
@@ -77,5 +97,16 @@ public class DataServlet extends HttpServlet {
       return defaultValue;
     }
     return value;
+  }
+
+  // Sets the 'is_*item*_liked' property of an entity.
+  private static void setIsItemLiked(HttpServletRequest request, Entity entity, String item){
+     String itemParameterName = "is_" + item + "_liked";
+     if(Boolean.parseBoolean(getParameter(request, itemParameterName, "false"))){
+          entity.setProperty(itemParameterName, "true");
+      } 
+      else{
+          entity.setProperty(itemParameterName, "false");
+      }
   }
 }
