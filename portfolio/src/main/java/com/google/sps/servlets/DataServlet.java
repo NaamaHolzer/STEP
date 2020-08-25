@@ -40,6 +40,7 @@ public class DataServlet extends HttpServlet {
       
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
+      
       // Number of comments to display 
       int limit = Integer.parseInt(request.getParameter("limit"));
       List<Comment> comments = new ArrayList<>();

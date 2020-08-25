@@ -62,12 +62,15 @@
              <input type="submit" />
       </form>
     </div>
-    <div id="comments-container" style="text-align:center;">
-        <h3 id="comments-header">Comments</h3>
-    </div>
     <div style="text-align:center;">
+        <h3>Comments</h3>
+    </div>
+    <div id="comments-container" style="text-align:center;"></div>
+    <div style="text-align:center;">
+        <br/>
         <label for="limit">How many comments do you want displayed?</label>
-        <input type="number" id="limit" name="limit" min="0" onchange="changeNumberOfComments()">
+        <input type="number" id="limit" name="limit" min="0" value="5" onchange="getCommentsFromServer()">
+        <button id="deleteButton" onclick="deleteComments()">Delete all comments</button>
     </div>
   </body>
 </html>

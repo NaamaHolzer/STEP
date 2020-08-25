@@ -33,6 +33,7 @@ function getCommentsFromServer() {
     const lim = document.getElementById("limit").value;
     fetch('/data?limit='+lim).then(response => response.json()).then((allComments) => {
     const totalEl = document.getElementById('comments-container');
+    totalEl.innerHTML = '';
     let commentStr = '';
         for (i = 0;i < allComments.length;i++) {
             commentStr = allComments[i].author+": Rate: "+allComments[i].rate+". ";
@@ -45,20 +46,24 @@ function getCommentsFromServer() {
                 commentStr += "Comment: "+allComments[i].text;
             }
             commentEl = createPElement(commentStr);
+            commentEl.style.border = "thin solid gray";
+            commentEl.style.width = "650px";
+            commentEl.style.margin = "auto";
             totalEl.appendChild(commentEl);
+        }
+        if (allComments.length==0) {
+            document.getElementById("deleteButton").disabled = true;
+        }
+        else {
+            document.getElementById("deleteButton").disabled = false;
         }
     });
 }
 
-// Invoked when the user sets a new maximum number of comments displayed
-function changeNumberOfComments() {
-    let commentCont = document.getElementById("comments-container");
-    // Clear out old comments before inserting the new response
-    while (commentCont.childElementCount>1) {
-        commentCont.removeChild(commentCont.lastChild);
-    }
-    // Insert new response
-    getCommentsFromServer();
+// Delete all comments from the server and remove them from the portfolio page
+function deleteComments() {
+    fetch('/delete-data', {method: 'POST'}).then(getCommentsFromServer());
+    location.reload();
 }
 
 function createPElement(text) {
@@ -66,6 +71,3 @@ function createPElement(text) {
   pElement.innerText = text;
   return pElement;
 }
-
-
-
