@@ -22,6 +22,7 @@ import java.util.List;
  * <p>Note: The private variables in this class are converted into JSON.
  */
 public class Comment {
+    // Builder design pattern to create Comment instances
     public static class Builder {
         private String author; 
         private int rate;
@@ -54,14 +55,14 @@ public class Comment {
             return new Comment(this);
         }
     }
-    
+
     private String author;
     // The 1-5 rate users can give.
     private int rate;
     // The options marked as 'liked' by the user.
     private ArrayList<String> likedOptions;
     private String text;
-    //Timestamp to enable sorting the comments
+    // Timestamp to enable sorting the comments
     private final long timestamp;
     public Comment(Builder builder) {
         this.author = builder.author;
