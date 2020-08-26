@@ -22,6 +22,39 @@ import java.util.List;
  * <p>Note: The private variables in this class are converted into JSON.
  */
 public class Comment {
+    public static class Builder {
+        private String author; 
+        private int rate;
+        private ArrayList<String> likedOptions;
+        private String text;
+        private final long timestamp;
+
+        public Builder(long newTimestamp) {
+            this.timestamp = newTimestamp;
+        }
+        public Builder byAuthor(String newAuthor){
+            this.author = newAuthor;
+            return this;
+        }
+        public Builder rated(int newRate){
+            this.rate = newRate;
+            return this;
+        }
+        public Builder likedTheseOptions(ArrayList<String> newLikedOptions){
+            this.likedOptions = new ArrayList<String>(newLikedOptions);
+            return this;
+        }
+        public Builder textWritten(String newText){
+            this.text = newText;
+            return this;
+        }
+
+        public Comment build(){
+            // Create the comment
+            return new Comment(this);
+        }
+    }
+    
     private String author;
     // The 1-5 rate users can give.
     private int rate;
@@ -30,11 +63,11 @@ public class Comment {
     private String text;
     //Timestamp to enable sorting the comments
     private final long timestamp;
-    public Comment(String newAuthor, int newRate, ArrayList<String> newLikedOptions, String newText, long newTimestamp) {
-        this.likedOptions = new ArrayList<>(newLikedOptions);
-        this.author = newAuthor;
-        this.rate = newRate;
-        this.text = newText;
-        this.timestamp = newTimestamp;
+    public Comment(Builder builder) {
+        this.author = builder.author;
+        this.rate = builder.rate;
+        this.likedOptions = new ArrayList<String>(builder.likedOptions);
+        this.text = builder.text;
+        this.timestamp = builder.timestamp;
     }
 }

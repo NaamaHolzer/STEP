@@ -64,7 +64,7 @@ public class DataServlet extends HttpServlet {
                 }
               String textVal = (String) entity.getProperty("text");
               long timestampVal = (long) entity.getProperty("timestamp");
-              Comment comment = new Comment(authorVal,rateVal,likedOptionsVal,textVal,timestampVal);
+              Comment comment = new Comment.Builder(timestampVal).byAuthor(authorVal).rated(rateVal).likedTheseOptions(likedOptionsVal).textWritten(textVal).build();
               comments.add(comment);
             }
             else {
