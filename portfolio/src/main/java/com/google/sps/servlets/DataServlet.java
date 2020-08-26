@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.sps.data.Comment;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -45,31 +46,26 @@ public class DataServlet extends HttpServlet {
       int limit = Integer.parseInt(request.getParameter("limit"));
       List<Comment> comments = new ArrayList<>();
       // Add the number of comments specified by the user to the comments list
-      for (Entity entity : results.asIterable()) {
-          if (comments.size()<limit) {
-              String authorVal = (String) entity.getProperty("author");
-              int rateVal = (int)(long) entity.getProperty("rate");
-              ArrayList<String> likedOptionsVal = new ArrayList<>();
-              if (Boolean.parseBoolean((String) entity.getProperty("is_info_liked"))) {
-                  likedOptionsVal.add("The info");
-                }
-              if (Boolean.parseBoolean((String) entity.getProperty("is_facts_liked"))) {
-                  likedOptionsVal.add("The facts");
-                }
-              if (Boolean.parseBoolean((String) entity.getProperty("is_gallery_liked"))) {
-                  likedOptionsVal.add("The gallery");
-                }
-              if (Boolean.parseBoolean((String) entity.getProperty("is_other_liked"))) {
-                  likedOptionsVal.add("Other");
-                }
-              String textVal = (String) entity.getProperty("text");
-              long timestampVal = (long) entity.getProperty("timestamp");
-              Comment comment = new Comment.Builder(timestampVal).byAuthor(authorVal).rated(rateVal).likedTheseOptions(likedOptionsVal).textWritten(textVal).build();
-              comments.add(comment);
+      for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(limit))) {
+          String authorVal = (String) entity.getProperty("author");
+          int rateVal = (int)(long) entity.getProperty("rate");
+          ArrayList<String> likedOptionsVal = new ArrayList<>();
+          if (Boolean.parseBoolean((String) entity.getProperty("is_info_liked"))) {
+              likedOptionsVal.add("The info");
             }
-            else {
-                break;
+          if (Boolean.parseBoolean((String) entity.getProperty("is_facts_liked"))) {
+              likedOptionsVal.add("The facts");
             }
+          if (Boolean.parseBoolean((String) entity.getProperty("is_gallery_liked"))) {
+              likedOptionsVal.add("The gallery");
+            }
+          if (Boolean.parseBoolean((String) entity.getProperty("is_other_liked"))) {
+              likedOptionsVal.add("Other");
+            }
+          String textVal = (String) entity.getProperty("text");
+          long timestampVal = (long) entity.getProperty("timestamp");
+          Comment comment = new Comment.Builder(timestampVal).byAuthor(authorVal).rated(rateVal).likedTheseOptions(likedOptionsVal).textWritten(textVal).build();
+          comments.add(comment);
         }
         Gson gson = new Gson();
         response.setContentType("application/json;");
