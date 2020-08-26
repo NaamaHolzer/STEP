@@ -64,7 +64,7 @@ public class Comment {
     private String text;
     // Timestamp to enable sorting the comments
     private final long timestamp;
-    public Comment(Builder builder) {
+    private Comment(Builder builder) {
         this.author = builder.author;
         this.rate = builder.rate;
         this.likedOptions = new ArrayList<String>(builder.likedOptions);
