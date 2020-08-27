@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body onload="getCommentsFromServer()">
+  <body onload="preparePage()">
     <div id="content">
       <h1>Welcome to Naama's Portfolio</h1>
       <img src="/images/myPicture.jpg" height="200px" width="150px"/>
@@ -40,8 +40,9 @@
       <p>Click here to get a random fact about me</p>
       <button onclick="addRandomFact()">Hello</button>
       <div id="fact-container" style="border:thin"></div>
-         <h2>Let me know what you think about my portfolio :)</h2>
-         <form action="/data" method="POST">
+      <div id="new-comment">
+          <h2>Let me know what you think about my portfolio :)</h2>
+          <form id="comments-form" action="/data" method="POST" style="display:none">
              <p>Please enter your name here</p>
              <textarea name="author" required></textarea>
              <p>On a scale of 1 to 5, 1 being poor and 5 being great, how would you rate this page?</p>
@@ -60,17 +61,18 @@
              <textarea name="text"></textarea>
              <br/><br/>
              <input type="submit" />
-      </form>
-    </div>
-    <div style="text-align:center;">
-        <h3>Comments</h3>
-    </div>
-    <div id="comments-container" style="text-align:center;"></div>
-    <div style="text-align:center;">
-        <br/>
-        <label for="limit">How many comments do you want displayed?</label>
-        <input type="number" id="limit" name="limit" min="0" value="5" onchange="getCommentsFromServer()">
-        <button id="deleteButton" onclick="deleteComments()">Delete all comments</button>
+          </form>
+      </div>
+      <div style="text-align:center;">
+          <h3>Comments</h3>
+      </div>
+      <div id="comments-container" style="text-align:center;"></div>
+      <div style="text-align:center;">
+          <br/>
+          <label for="limit">How many comments do you want displayed?</label>
+          <input type="number" id="limit" name="limit" min="0" value="5" onchange="getCommentsFromServer()">
+          <button id="deleteButton" onclick="deleteComments()">Delete all comments</button>
+      </div>
     </div>
   </body>
 </html>
