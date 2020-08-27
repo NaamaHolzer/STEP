@@ -42,14 +42,15 @@ function getCommentsFromServer() {
     totalEl.innerHTML = '';
     let commentStr = '';
         for (i = 0;i < allComments.length;i++) {
-            commentStr = allComments[i].author+": Rate: "+allComments[i].rate+". ";
+            commentStr = "Author: " + allComments[i].author+": ";
+            commentStr += "Rate: " + allComments[i].rate+". ";
             // If the list of the liked items is not empty - display the liked items. 
             if ((allComments[i].likedOptions).length!==0) {
-                commentStr += "Liked: "+allComments[i].likedOptions+". ";
+                commentStr += "Liked: " + allComments[i].likedOptions+". ";
             }
             // If the comment includes text - display it.
             if (allComments[i].text!=='') {
-                commentStr += "Comment: "+allComments[i].text;
+                commentStr += "Comment: " + allComments[i].text;
             }
             commentEl = createPElement(commentStr);
             commentEl.style.border = "thin solid gray";
@@ -68,25 +69,34 @@ function getCommentsFromServer() {
  
 // Fetch the login status from the servlet. If the user is logged in display comments form and a logout URL. Otherwise - display a login URL.
 function displayFormIfLoggedIn() {
-    fetch('/login-info').then(response=>response.text()).then((textRes) => {
+    fetch('/login-info').then(response => response.text()).then((textRes) => {
         // Parse the text from the response to an html page
         var parser = new DOMParser();
         var htmlRes = parser.parseFromString(textRes, "text/html");
- 
-       const isLoggedIn = htmlRes.getElementById('isLoggedIn').innerText;
-       // Display form and logout URL if logged in
-       if (isLoggedIn === "User is logged in") {
-           document.getElementById("comments-form").style.display = "block";
-           const logoutUrl = htmlRes.getElementById("logoutUrl");
-           document.getElementById("comments-form").appendChild(logoutUrl);
-       }
-       // Display login URL if not logged in
-       else {
-           const loginUrl = htmlRes.getElementById("loginUrl");
-           document.getElementById("new-comment").appendChild(loginUrl);
-       }
-  });
- 
+        
+        const isLoggedIn = htmlRes.getElementById('isLoggedIn').innerText;
+        // Display form and logout URL if logged in
+        if (isLoggedIn === "User is logged in") {
+            document.getElementById("comments-form").style.display = "block";
+            const logoutUrl = htmlRes.getElementById("logoutUrl");
+            document.getElementById("comments-form").appendChild(logoutUrl);
+
+            // Get nickname information from the nickname servlet
+            fetch('/nickname').then(nicknameResponse => nicknameResponse.text()).then((textNickname) => {
+                // Parse the text from the response to an html page
+                var parser = new DOMParser();
+                var htmlNickname = parser.parseFromString(textNickname, "text/html");
+                const nicknameForm = htmlNickname.getElementById("nickname");
+                document.getElementById("nickname-setter").appendChild(nicknameForm);
+            });
+
+        }
+        // Display login URL if not logged in
+        else {
+            const loginUrl = htmlRes.getElementById("loginUrl");
+            document.getElementById("new-comment").appendChild(loginUrl);
+        }
+    });
 }
  
 // Delete all comments from the server and remove them from the portfolio page
