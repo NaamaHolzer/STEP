@@ -40,14 +40,16 @@ public class AuthServlet extends HttpServlet {
 
     // If the user is logged in - display his email address and a logout URL.
     if (userService.isUserLoggedIn()) {
-        response.getWriter().println("<p id=\"isLoggedIn\">User is logged in</p>"); 
-        response.getWriter().println("<p>" + userService.getCurrentUser().getEmail() + "</p>");
-        response.getWriter().println("<p id=\"logoutUrl\">Logout <a href=\"" + userService.createLogoutURL("/") + "\">here</a>.</p>");
+        String responseFormat = "<p id=\"isLoggedIn\">User is logged in</p>";
+        responseFormat += "<p>" + userService.getCurrentUser().getEmail() + "</p>";
+        responseFormat += "<p id=\"logoutUrl\">Logout <a href=\"" + userService.createLogoutURL("/") + "\">here</a>.</p>";
+        response.getWriter().println(responseFormat);
     }
     // If the user is not logged in - display a login URL.
     else {
-        response.getWriter().println("<p id=\"isLoggedIn\">User is not logged in</p>");
-        response.getWriter().println("<p id=\"loginUrl\">Login <a href=\"" + userService.createLoginURL("/") + "\">here</a> to leave a comment.</p>");
+        String responseFormat = "<p id=\"isLoggedIn\">User is not logged in</p>";
+        responseFormat += "<p id=\"loginUrl\">Login <a href=\"" + userService.createLoginURL("/") + "\">here</a> to leave a comment.</p>";
+        response.getWriter().println(responseFormat);
     }
   }
 
