@@ -71,8 +71,8 @@ function getCommentsFromServer() {
 function displayFormIfLoggedIn() {
     fetch('/login-info').then(response => response.text()).then((textRes) => {
         // Parse the text from the response to an html page
-        var parser = new DOMParser();
-        var htmlRes = parser.parseFromString(textRes, "text/html");
+        const parser = new DOMParser();
+        const htmlRes = parser.parseFromString(textRes, "text/html");
         
         const isLoggedIn = htmlRes.getElementById('isLoggedIn').innerText;
         // Display form and logout URL if logged in
@@ -84,8 +84,7 @@ function displayFormIfLoggedIn() {
             // Get nickname information from the nickname servlet
             fetch('/nickname').then(nicknameResponse => nicknameResponse.text()).then((textNickname) => {
                 // Parse the text from the response to an html page
-                var parser = new DOMParser();
-                var htmlNickname = parser.parseFromString(textNickname, "text/html");
+                const htmlNickname = parser.parseFromString(textNickname, "text/html");
                 const nicknameForm = htmlNickname.getElementById("nickname");
                 document.getElementById("nickname-setter").appendChild(nicknameForm);
             });
