@@ -11,7 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
- 
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawActivitiesChart);
+
 /**
  * Adds a random fact to the page.
  */
@@ -32,6 +35,7 @@ function addRandomFact() {
 function preparePage() {
     getCommentsFromServer();
     displayFormIfLoggedIn();
+    drawActivitiesChart();
 }
  
 // Gets the comments list from the server and displays it.
@@ -104,6 +108,30 @@ function deleteComments() {
     location.reload();
 }
  
+// Create the activities chart and add it to the page
+function drawActivitiesChart() {
+    const data = new google.visualization.DataTable();
+    data.addColumn('string', 'Activity');
+    data.addColumn('number', 'Count');
+    data.addRows([
+        ['Read', 2],
+        ['Work', 9],
+        ['Sleep', 7],
+        ['Spend time on my phone', 3],
+        ['Other', 3]
+    ]);
+    
+    const options = {
+        'title': 'Daily Activities',
+        'width':500,
+        'height':400
+    };
+    
+    const chart = new google.visualization.PieChart(
+        document.getElementById('activities-chart-container'));
+    chart.draw(data, options);
+}
+
 function createPElement(text) {
   const pElement = document.createElement('p');
   pElement.innerText = text;
