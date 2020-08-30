@@ -46,12 +46,12 @@ public class NicknameServlet extends HttpServlet {
         responseFormat += "<input name=\"nickname\"/>";
         responseFormat += "<br/>";
         responseFormat += "<button>Submit</button>";
-        responseFormat += "</form></div>"
+        responseFormat += "</form></div>";
         out.println(responseFormat);  
     }
     // If the user is not logged in - display a login URL.
     else {
-        String responseFormat = "<p id=\"nickname\">Welcome back, " + nickname + "!</p>"
+        String responseFormat = "<p id=\"nickname\">Welcome back, " + nickname + "!</p>";
         out.println(responseFormat); 
     }
   }
