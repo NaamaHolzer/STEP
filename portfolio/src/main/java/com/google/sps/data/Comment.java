@@ -33,29 +33,29 @@ public class Comment {
         public Builder(long newTimestamp) {
             this.timestamp = newTimestamp;
         }
-        public Builder byAuthor(String newAuthor){
+        public Builder byAuthor(String newAuthor) {
             this.author = newAuthor;
             return this;
         }
-        public Builder rated(int newRate){
+        public Builder rated(int newRate) {
             this.rate = newRate;
             return this;
         }
-        public Builder likedTheseOptions(ArrayList<String> newLikedOptions){
+        public Builder likedTheseOptions(ArrayList<String> newLikedOptions) {
             this.likedOptions = new ArrayList<String>(newLikedOptions);
             return this;
         }
-        public Builder textWritten(String newText){
+        public Builder textWritten(String newText) {
             this.text = newText;
             return this;
         }
 
-        public Comment build(){
+        public Comment build() {
             // Create the comment
             return new Comment(this);
         }
     }
-
+    
     private String author;
     // The 1-5 rate users can give.
     private int rate;
