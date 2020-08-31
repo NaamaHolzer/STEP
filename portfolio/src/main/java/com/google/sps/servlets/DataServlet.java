@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -124,6 +125,7 @@ public class DataServlet extends HttpServlet {
      String itemParameterName = "is_" + item + "_liked";
      if (Boolean.parseBoolean(getParameter(request, itemParameterName, "false"))) {
           entity.setProperty(itemParameterName, "true");
+          updateChartData(item);
       } 
       else {
           entity.setProperty(itemParameterName, "false");
@@ -144,4 +146,30 @@ public class DataServlet extends HttpServlet {
     String nickname = (String) entity.getProperty("nickname");
     return nickname;
   }
+
+  // Update the data of the chart representing how many likes each item got.
+  private static void updateChartData(String itemLiked) {
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+      // Find the entity that matches the item that was liked.
+      FilterPredicate likedItemFilter = new Query.FilterPredicate("ItemName", Query.FilterOperator.EQUAL, itemLiked);
+      Query query = new Query("LikedItem").setFilter(likedItemFilter);
+      PreparedQuery results = datastore.prepare(query);
+
+      // If the entity exists - this item has been liked before - increment the counter by 1.
+      if (results.countEntities(FetchOptions.Builder.withDefaults())>0) {
+          Entity likedItemEntity = results.asSingleEntity();
+          long newCount = (long)likedItemEntity.getProperty("Count")+1;
+          likedItemEntity.setProperty("Count",newCount);
+          datastore.put(likedItemEntity);
+        }
+      
+      // If the entity doesn't exist - this is the first time this item is being liked - create the entity and set the counter to 1.
+      else {
+          Entity likedItemEntity = new Entity("LikedItem");
+          likedItemEntity.setProperty("ItemName",itemLiked);
+          likedItemEntity.setProperty("Count",1);
+          datastore.put(likedItemEntity);
+        }
+    }
 }
