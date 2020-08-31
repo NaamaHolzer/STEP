@@ -152,23 +152,23 @@ public class DataServlet extends HttpServlet {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
       // Find the entity that matches the item that was liked.
-      FilterPredicate likedItemFilter = new Query.FilterPredicate("ItemName", Query.FilterOperator.EQUAL, itemLiked);
+      FilterPredicate likedItemFilter = new Query.FilterPredicate("itemName", Query.FilterOperator.EQUAL, itemLiked);
       Query query = new Query("LikedItem").setFilter(likedItemFilter);
       PreparedQuery results = datastore.prepare(query);
 
       // If the entity exists - this item has been liked before - increment the counter by 1.
       if (results.countEntities(FetchOptions.Builder.withDefaults())>0) {
           Entity likedItemEntity = results.asSingleEntity();
-          long newCount = (long)likedItemEntity.getProperty("Count")+1;
-          likedItemEntity.setProperty("Count",newCount);
+          long newCount = (long)likedItemEntity.getProperty("count")+1;
+          likedItemEntity.setProperty("count",newCount);
           datastore.put(likedItemEntity);
         }
       
       // If the entity doesn't exist - this is the first time this item is being liked - create the entity and set the counter to 1.
       else {
           Entity likedItemEntity = new Entity("LikedItem");
-          likedItemEntity.setProperty("ItemName",itemLiked);
-          likedItemEntity.setProperty("Count",1);
+          likedItemEntity.setProperty("itemName",itemLiked);
+          likedItemEntity.setProperty("count",1);
           datastore.put(likedItemEntity);
         }
     }
