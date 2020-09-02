@@ -13,7 +13,6 @@
 // limitations under the License.
 
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawActivitiesChart);
 
 /**
  * Adds a random fact to the page.
@@ -36,6 +35,7 @@ function preparePage() {
     getCommentsFromServer();
     displayFormIfLoggedIn();
     drawActivitiesChart();
+    drawCommentsDataChart();
 }
  
 // Gets the comments list from the server and displays it.
@@ -130,6 +130,29 @@ function drawActivitiesChart() {
     const chart = new google.visualization.PieChart(
         document.getElementById('activities-chart-container'));
     chart.draw(data, options);
+}
+
+// Draw the comments chart based on the items that were liked
+function drawCommentsDataChart() {
+    fetch('/chart').then(response => response.json())
+    .then((likesCounters) => {
+        const data = new google.visualization.DataTable();
+        data.addColumn('string', 'Item');
+        data.addColumn('number', 'Likes');
+        Object.keys(likesCounters).forEach((itemName) => {
+            data.addRow([itemName, likesCounters[itemName]]);
+        });
+        
+        const options = {
+            'title': 'Likes Received',
+            'width':600,
+            'height':500
+        };
+
+        const chart = new google.visualization.ColumnChart(
+            document.getElementById('comments-chart-container'));
+        chart.draw(data, options); 
+    });
 }
 
 function createPElement(text) {
