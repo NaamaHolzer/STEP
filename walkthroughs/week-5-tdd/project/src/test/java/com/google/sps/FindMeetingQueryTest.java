@@ -146,7 +146,7 @@ public final class FindMeetingQueryTest {
 
     Assert.assertEquals(expected, actual);
   }
-
+  
   @Test
   public void nestedEvents() {
     // Have an event for each person, but have one person's event fully contain another's event. We
