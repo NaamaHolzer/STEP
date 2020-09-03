@@ -143,7 +143,7 @@ public final class FindMeetingQuery {
         }
     }
 
-    // Breaks an available range that overlaps with an optional busy range into 0/1/2 available ranges according to the situation.
+    // Breaks an available range that overlaps with an optional busy range into 0/1/2 available sub ranges according to the situation.
     public static ArrayList<TimeRange> breakAvailableRange(TimeRange availableRange, TimeRange opBusyRange) {
         ArrayList<TimeRange> result = new ArrayList<>();
 
@@ -170,7 +170,7 @@ public final class FindMeetingQuery {
         // Option 3: (A - available, B - optional busy)
         // Events  :  |--A-------|
         //                 |-----B-----|
-        // Result  :  |-1-|            
+        // Result  :  |-1--|            
         if (availableRange.start() <= opBusyRange.start()) {
             TimeRange beforeOpBusy = TimeRange.fromStartEnd(availableRange.start(), opBusyRange.start(), false);
             result.add(beforeOpBusy);
