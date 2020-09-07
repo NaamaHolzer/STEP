@@ -36,6 +36,7 @@ function preparePage() {
     displayFormIfLoggedIn();
     drawActivitiesChart();
     drawCommentsDataChart();
+    createMap();
 }
  
 // Gets the comments list from the server and displays it.
@@ -153,6 +154,13 @@ function drawCommentsDataChart() {
             document.getElementById('comments-chart-container'));
         chart.draw(data, options); 
     });
+}
+
+// Create the map and add it to the main page
+function createMap() {
+    const map = new google.maps.Map(
+      document.getElementById('map'),
+      {center: {lat: 31.779, lng: 35.224}, zoom: 16});
 }
 
 function createPElement(text) {
