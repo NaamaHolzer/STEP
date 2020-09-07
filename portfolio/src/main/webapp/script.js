@@ -170,7 +170,7 @@ function createMap() {
 }
 
 // Add a marker to the map in a given location
-function addMapMarker(mapVal, latVal,lngVal,markerName) {
+function addMapMarker(mapVal, latVal, lngVal, markerName) {
     const marker = new google.maps.Marker({
         position: {lat: latVal, lng: lngVal},
         map: mapVal,
