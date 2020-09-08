@@ -39,6 +39,7 @@ public final class FindMeetingQueryTest {
   // All dates are the first day of the year 2020.
   private static final int TIME_0800AM = TimeRange.getTimeInMinutes(8, 0);
   private static final int TIME_0830AM = TimeRange.getTimeInMinutes(8, 30);
+  private static final int TIME_0845AM = TimeRange.getTimeInMinutes(8, 45);
   private static final int TIME_0900AM = TimeRange.getTimeInMinutes(9, 0);
   private static final int TIME_0930AM = TimeRange.getTimeInMinutes(9, 30);
   private static final int TIME_1000AM = TimeRange.getTimeInMinutes(10, 0);
@@ -299,7 +300,7 @@ public final class FindMeetingQueryTest {
             Arrays.asList(PERSON_A)),
         new Event("Event 2", TimeRange.fromStartEnd(TIME_0900AM, TimeRange.END_OF_DAY, true),
             Arrays.asList(PERSON_A)),
-        new Event("Event 3", TimeRange.fromStartDuration(TIME_0830AM, DURATION_15_MINUTES),
+        new Event("Event 3", TimeRange.fromStartEnd(TIME_0830AM, TIME_0845AM, false),
             Arrays.asList(PERSON_B)));
 
     MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_30_MINUTES);
@@ -387,7 +388,7 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void noMandatoryNoGaps() {
-    // Have two optional attendees with no gaps in their schedules. The whole day should be returned
+    // Have two optional attendees with no gaps in their schedules. The whole day should be returned.
     //
     // Events  : |----A----||----B-----|
     // Day     : |---------------------|
@@ -408,4 +409,3 @@ public final class FindMeetingQueryTest {
     Assert.assertEquals(expected, actual);
   } 
 }
-

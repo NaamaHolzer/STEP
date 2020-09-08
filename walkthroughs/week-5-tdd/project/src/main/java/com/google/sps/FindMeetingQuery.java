@@ -24,21 +24,22 @@ public final class FindMeetingQuery {
 
     // Find optional time ranges for the meeting.
     public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+
         ArrayList<TimeRange> mandatoryBusy = new ArrayList<>();
         ArrayList<TimeRange> optionalBusy = new ArrayList<>();
         ArrayList<TimeRange> mandatoryAvailable = new ArrayList<>();
         Collection<TimeRange> allAvailable = new ArrayList<>();
 
-        // Iterate over the events and add to the mandatoryBusy array the time ranges of events in which mandatory attendees of the request participate.
+        // Iterate over the events and find out when the mandatory attendees are busy and when the optional attendees are busy.
         for (Event event : events) {
-            Boolean areAttendeesSetsDisjoint = Collections.disjoint(request.getAttendees(), event.getAttendees());
+            boolean areAttendeesSetsDisjoint = Collections.disjoint(request.getAttendees(), event.getAttendees());
             // If the request's attendees set and the event's attendees set aren't disjoint - the event's time range is a busy range.
             if (!areAttendeesSetsDisjoint) {
                 mandatoryBusy.add(event.getWhen());
             }
             // If no mandatory attendee is in the event - check if there are optional attendees in it.
             else {
-                Boolean areOptionalSetsDisjoint = Collections.disjoint(request.getOptionalAttendees(), event.getAttendees());
+                boolean areOptionalSetsDisjoint = Collections.disjoint(request.getOptionalAttendees(), event.getAttendees());
                 if (!areOptionalSetsDisjoint) {
                     optionalBusy.add(event.getWhen());
                 }
@@ -60,7 +61,7 @@ public final class FindMeetingQuery {
 
         // If the first busy range is not at the beginning of the day - the first time range is available.
         if (mandatoryBusy.get(0).start() != TimeRange.START_OF_DAY) {
-            TimeRange firstRange = TimeRange.fromStartDuration(TimeRange.START_OF_DAY, mandatoryBusy.get(0).start() - TimeRange.START_OF_DAY);
+            TimeRange firstRange = TimeRange.fromStartEnd(TimeRange.START_OF_DAY, mandatoryBusy.get(0).start(), false);
             addIfRangeIsLongEnough(mandatoryAvailable, firstRange, request);
         }
 
@@ -73,11 +74,11 @@ public final class FindMeetingQuery {
             }
             // If the current busy range and mandatoryBusy[i] overlap - update the current busy range to contain mandatoryBusy[i] as well.
             if (currBusy.overlaps(mandatoryBusy.get(i)) && !currBusy.equals(mandatoryBusy.get(i))) {
-                currBusy = TimeRange.fromStartDuration(currBusy.start(), mandatoryBusy.get(i).end() - currBusy.start());
+                currBusy = TimeRange.fromStartEnd(currBusy.start(), mandatoryBusy.get(i).end(), false);
             }
             // If they don't overlap - there's an available range between them
             else {
-                TimeRange availableRange = TimeRange.fromStartDuration(currBusy.end(), mandatoryBusy.get(i).start() - currBusy.end());
+                TimeRange availableRange = TimeRange.fromStartEnd(currBusy.end(), mandatoryBusy.get(i).start(), false);
                 addIfRangeIsLongEnough(mandatoryAvailable, availableRange, request);
                 //Update currBusy to be mandatoryBusy[i]
                 currBusy = TimeRange.fromStartDuration(mandatoryBusy.get(i).start(), mandatoryBusy.get(i).duration());
@@ -102,7 +103,7 @@ public final class FindMeetingQuery {
 
     public static void checkOptionalAttendees(Collection<TimeRange> allAvailable, ArrayList<TimeRange> mandatoryAvailable, ArrayList<TimeRange> optionalBusy, MeetingRequest request) {
         int opIndex = 0;
-        Boolean moreOptionalBusy = true;
+        boolean moreOptionalBusy = true;
         // Iterate over the ranges that are available for the mandatory attendees to find ranges that are available for the optional attendees as well.
         for (int i = 0; i < mandatoryAvailable.size(); i++) {
             // If there are no more optional busy ranges then the rest of the available ranges are 'safe'.
