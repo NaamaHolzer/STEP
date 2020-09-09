@@ -36,6 +36,7 @@ function preparePage() {
     displayFormIfLoggedIn();
     drawActivitiesChart();
     drawCommentsDataChart();
+    createMap();
 }
  
 // Gets the comments list from the server and displays it.
@@ -152,6 +153,28 @@ function drawCommentsDataChart() {
         const chart = new google.visualization.ColumnChart(
             document.getElementById('comments-chart-container'));
         chart.draw(data, options); 
+    });
+}
+
+// Create the map and add it to the main page
+function createMap() {
+    const map = new google.maps.Map(
+        document.getElementById('map'),
+        {center: {lat: 31.779, lng: 35.224}, zoom: 13});
+    
+    addMapMarker(map, 31.784, 35.212, "Machane Yehuda Market");
+    addMapMarker(map, 31.774, 35.177, "Mt. Herzl");
+    addMapMarker(map, 31.776, 35.234, "The Old City");
+    addMapMarker(map, 31.78, 35.2, "Sacher Park");
+    addMapMarker(map, 31.751, 35.187, "Malcha Mall");
+}
+
+// Add a marker to the map in a given location
+function addMapMarker(mapVal, latVal, lngVal, markerName) {
+    const marker = new google.maps.Marker({
+        position: {lat: latVal, lng: lngVal},
+        map: mapVal,
+        title: markerName
     });
 }
 
