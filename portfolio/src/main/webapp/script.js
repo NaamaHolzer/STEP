@@ -160,21 +160,25 @@ function drawCommentsDataChart() {
 function createMap() {
     const map = new google.maps.Map(
         document.getElementById('map'),
-        {center: {lat: 31.779, lng: 35.224}, zoom: 13});
+        {center: {lat: 31.779, lng: 35.224}, zoom: 13, mapTypeId: 'hybrid'});
     
-    addMapMarker(map, 31.784, 35.212, "Machane Yehuda Market");
-    addMapMarker(map, 31.774, 35.177, "Mt. Herzl");
-    addMapMarker(map, 31.776, 35.234, "The Old City");
-    addMapMarker(map, 31.78, 35.2, "Sacher Park");
-    addMapMarker(map, 31.751, 35.187, "Malcha Mall");
+    addMapMarker(map, 31.784, 35.212, "Machane Yehuda Market", "The most famous market of jerusalem - 'The Shuk'.");
+    addMapMarker(map, 31.774, 35.177, "Mt. Herzl", "A beautiful place where official ceremonies often take place.");
+    addMapMarker(map, 31.776, 35.234, "The Old City", "Everything about this place is special. The Western Wall, the old houses, the people and everything else.");
+    addMapMarker(map, 31.78008, 35.205, "Sacher Park", "A nice park good for a run, a BBQ or just for hanging out with friends.");
+    addMapMarker(map, 31.751, 35.187, "Malcha Mall", "The biggest mall in Jerusalem.");
 }
 
 // Add a marker to the map in a given location
-function addMapMarker(mapVal, latVal, lngVal, markerName) {
+function addMapMarker(mapVal, latVal, lngVal, markerName, contentVal) {
     const marker = new google.maps.Marker({
         position: {lat: latVal, lng: lngVal},
         map: mapVal,
         title: markerName
+    });
+    const infoWindow = new google.maps.InfoWindow({content: contentVal});
+    marker.addListener('click', () => {
+        infoWindow.open(map, marker);
     });
 }
 
